@@ -15,6 +15,7 @@ public:
     String(const char *string);
     String(const String &str);
     String(String &&str);
+    String& operator=(String&& string);
     void Print();
     ~String();
 
