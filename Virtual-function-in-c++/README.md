@@ -56,3 +56,7 @@ int main()
   print(p_o); // output: EntityClass 
 }
 ```
+
+## Virtal function drawback
+* Memory: We need to store a ```virtual table``` in the base class that maps to which function should be called.
+* Time: In each call to this function, there will be a time to determine using the virtual table which function should be called.
