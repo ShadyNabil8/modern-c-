@@ -1,9 +1,9 @@
 
 # Polymorphism and Virtal function in C++
 
-An example on polymerphism concept that descrips the behavour of the program whentreating a sub class as a super class.
+An example of the polymerphism concept that describes the behavior of the program when treating a subclass as a superclass
 
-Here we have a function called PrintClassName() in both classes, we need to know what function of these two will be called using a base class instance in the case of treating this instance as base class object and in case of treating it as sub class object
+Here we have a function called PrintClassName() in both classes. We need to know what the function of these two will be called using a base class instance in the case of treating this instance as a base class object and in the case of treating it as a subclass object.
 
 ## EntityClass
 
