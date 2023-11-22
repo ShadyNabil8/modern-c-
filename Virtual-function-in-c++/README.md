@@ -60,3 +60,44 @@ int main()
 ## Virtal function drawback
 * Memory: We need to store a ```virtual table``` in the base class that maps to which function should be called.
 * Time: In each call to this function, there will be a time to determine using the virtual table which function should be called.
+
+
+# Pure virtual function in c++
+* Interface is a class that has only abstract methods (pure virtual functions).
+* Pure virual function is the same as abstract method in other languages like c# and java.
+* Function defined in a base class as pure virtual function forces the other subclasses to implement this function.
+* If a subclass has a pure v-function (from the base class), we cannot create an instance from this class (subclass) unless we implement this function.
+
+```cpp
+/* First, we create a class called Book and create a pure virtual fucntion like this*/
+virtual void GetBookName() = 0;
+```
+```cpp
+/* Second Entity inherite from the Book class and already Player inherite form the Entity */
+class Entity : public book
+```
+
+| :memo: | Take note of this |
+|---------------|:------------------------|
+#### If we notice we will see that there are erros with every Entity and PLayer instances because we must implement the pure virtual function.
+
+```cpp
+Entity* e = new Entity(); // Error
+Player* p = new Player(); //Error
+```
+Then we define this function in ```Player``` and ```Entity``` classes.
+
+```cpp
+/* Test our code */
+void VPrint(Book *b)
+{
+    b->GetBookName();
+}
+int main()
+{
+  Entity* e = new Entity();
+  Player* p = new Player();
+  VPrint(e);
+  VPrint(p);
+}
+```

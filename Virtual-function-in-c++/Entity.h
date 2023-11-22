@@ -3,7 +3,8 @@
 
 #pragma once
 #include <iostream>
-class Entity
+#include "Book.h"
+class Entity : public Book
 {
 public:
     Entity();
@@ -14,6 +15,11 @@ public:
     virtual void PrintClassName()
     {
         std::cout << "EntityClass" << std::endl;
+    }
+
+    void GetBookName() override
+    {
+        std::cout << "EntityBook" << std::endl;
     }
 
 private:

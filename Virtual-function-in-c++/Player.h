@@ -23,6 +23,11 @@ public:
         std::cout << "PlayerClass" << std::endl;
     }
 
+    void GetBookName() override
+    {
+        std::cout << "PlayerBook" << std::endl;
+    }
+
 private:
 };
 

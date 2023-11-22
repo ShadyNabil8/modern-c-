@@ -1,4 +1,5 @@
 #include <iostream>
+#include "Book.h"
 #include "Entity.h"
 #include "Player.h"
 
@@ -18,17 +19,24 @@ void print(Entity e)
 {
     e.PrintClassName();
 }
+void VPrint(Book *b)
+{
+    b->GetBookName();
+}
 
 int main()
 {
     /* Here we must use pointer to make the functionality */
-    Entity* e = new Entity();
-    Player* p = new Player();
-    print(e);
-    print(p);
+     Entity* e = new Entity();
+     Player* p = new Player();
+    // print(e);
+    // print(p);
 
-    Entity e_o =  Entity();
-    Player p_o =  Player();
-    print(e_o);
-    print(p_o);
+    // Entity e_o =  Entity();
+    // Player p_o =  Player();
+    // print(e_o);
+    // print(p_o);
+
+    VPrint(e);
+    VPrint(p);
 }
