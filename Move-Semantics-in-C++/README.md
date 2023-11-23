@@ -31,8 +31,6 @@ String::String(const String &str)
 
     memcpy(this->m_data, str.m_data, this->m_size);
 }
-
-}
 ```
 
 ## Move constructor
@@ -50,7 +48,6 @@ String::String(String &&str)
     
     str.m_size = 0;
     str.m_data = nullptr;
-}
 }
 ```
 # Example2 Move assignment operator(=)

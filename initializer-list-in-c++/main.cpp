@@ -38,9 +38,10 @@ Player::Player() : p1(Person(2)) // results in Created->2
 {
     p2 = Person(1);
     // results in:
-    
+
     // Created
     // Created->1 
+    
 }
 
 Player::~Player()
