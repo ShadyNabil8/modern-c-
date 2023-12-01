@@ -1,6 +1,8 @@
 
 # Polymorphism and Virtal function in C++
 
+### <span style="color: green"> Virtual enebles us to use polymorphism. </span>
+
 An example of the polymerphism concept that describes the behavior of the program when treating a subclass as a superclass
 
 Here we have a function called PrintClassName() in both classes. We need to know what the function of these two will be called using a base class instance in the case of treating this instance as a base class object and in the case of treating it as a subclass object.
@@ -13,6 +15,7 @@ void PrintClassName()
   std::cout << "EntityClass" << std::endl;
 }
 ```
+
 ## PlayerClass
 
 ```cpp
@@ -30,9 +33,11 @@ void print(Entity *e)
     e->PrintClassName();
 }
 ```
+
 Here if we pass a pointer to an ```Entity``` class opject, it is clear that the outpput will be "EntityClass". But if we pass a pointer to a ```Player``` class opject, the outpput will be "EntityClass" even if the function in this object prints "PlayerClass". We need the compiler to know that he should points to the function in the ```Player``` class even if we call it using pointer (e) which is of type ```Entity```but it poits to Player class data.
 
 ## Virtal function
+
 ```cpp
 /* Virtual function must be defined in the class defination */
 virtual void PrintClassName()
@@ -58,11 +63,12 @@ int main()
 ```
 
 ## Virtal function drawback
+
 * Memory: We need to store a ```virtual table``` in the base class that maps to which function should be called.
 * Time: In each call to this function, there will be a time to determine using the virtual table which function should be called.
 
-
 # Pure virtual function in c++
+
 * Interface is a class that has only abstract methods (pure virtual functions).
 * Pure virual function is the same as abstract method in other languages like c# and java.
 * Function defined in a base class as pure virtual function forces the other subclasses to implement this function.
@@ -72,6 +78,7 @@ int main()
 /* First, we create a class called Book and create a pure virtual fucntion like this*/
 virtual void GetBookName() = 0;
 ```
+
 ```cpp
 /* Second Entity inherite from the Book class and already Player inherite form the Entity */
 class Entity : public book
@@ -79,12 +86,14 @@ class Entity : public book
 
 | :memo: | Take note of this |
 |---------------|:------------------------|
-#### If we notice we will see that there are erros with every Entity and PLayer instances because we must implement the pure virtual function.
+
+#### If we notice we will see that there are erros with every Entity and PLayer instances because we must implement the pure virtual function
 
 ```cpp
 Entity* e = new Entity(); // Error
 Player* p = new Player(); //Error
 ```
+
 Then we define this function in ```Player``` and ```Entity``` classes.
 
 ```cpp
