@@ -37,6 +37,31 @@ public:
         other.m_data = nullptr;
     }
 
+    String &operator=(String &&other)
+    {
+        printf("Moved assignment! \n");
+        m_size = other.m_size;
+        m_data = other.m_data;
+
+        other.m_size = 0;
+        other.m_data = nullptr;
+
+        return *this;
+    }
+
+    // For fun
+    // String &operator=(String &other)
+    // {
+    //     printf("Copy assignment\n");
+    //     m_size = other.m_size;
+    //     m_data = other.m_data;
+
+    //     other.m_size = 0;
+    //     other.m_data = nullptr;
+
+    //     return *this;
+    // }
+
     void Print()
     {
         for (int i = 0; i < m_size; i++)
@@ -71,7 +96,14 @@ private:
 };
 int main()
 {
-    Entity e = Entity(String("Ahmed"));
-    // std::cin.get();
+    String khaled = String("Khaled");
+    String ahmed = String("Ahmed");
+    khaled = std::move(ahmed);
+
+    // For fun
+    // String mostafa = String("Mostafa");
+    // String shady = String("Shady");
+    // mostafa = shady;
+    //std::cin.get();
     return 0;
 }

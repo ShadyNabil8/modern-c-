@@ -175,3 +175,87 @@ String deleted!
 Entity deleted!
 String deleted!
 ```
+
+If we make thing like this
+
+```cpp
+String khaled = String("Khaled");
+String Ahmed(khaled);
+```
+
+In the second line, the copy constructor will be called. If we want to call the move constructor we will do this
+
+```cpp
+String Ahmed((String &&)khaled);
+```
+
+This casting maked khaled as rvalue and then the move constructor will be called. But the best thing is di this
+
+```cpp
+String Ahmed(std::move(khaled));
+```
+
+```std::move()``` itself doesn't release any resources. It's important to understand that std::move() is simply a cast that converts its argument into an rvalue reference.
+
+It's the move constructor (or move assignment operator as we will se later) that actually releases the resources of an object and transfers them to another object. When you use std::move(), you're signaling to the compiler that it should call the move constructor (or move assignment operator) if one is available
+
+If we thing like this
+
+```cpp
+String khaled = String("Khaled");
+String ahmed = String("Ahmed");
+khaled = std::move(ahmed);
+```
+
+In this case we try to ```move``` an ```existing``` object to anther ```existing``` object using move assignment operator ```=```. So we need to overload this operator inside the Sting class.
+
+```cpp
+String &operator=(String &&other)
+{
+    printf("Moved assignment! \n");
+    m_size = other.m_size;
+    m_data = other.m_data;
+    other.m_size = 0;
+    other.m_data = nullptr;
+    return *this;
+}
+```
+
+```
+Created!
+Created!
+Moved assignment! 
+String deleted!
+String deleted!
+```
+
+**_Remember:_** std::move() is a tool for enabling move semantics, but it doesn't directly release any resources. The release of resources typically happens within the move assignment operator (or move constructor) of the class, which is called after using std::move() in an assignment.
+
+You can say "Whay I am using std::move to do this while I can implement a copy assignment operator overload and use it without std::move and implement the same functionality of moving like this code"
+
+```cpp
+String &operator=(String &other)
+{
+    printf("Copy assignment\n");
+    m_size = other.m_size;
+    m_data = other.m_data;
+    other.m_size = 0;
+    other.m_data = nullptr;
+    return *this;
+}```
+
+```cpp
+String mostafa = String("Mostafa");
+String shady = String("Shady");
+mostafa = shady;
+```
+
+```
+Created!
+Created!
+Copy assignment
+String deleted!
+String deleted!
+```
+
+while technically possible, implementing the copy assignment operator to behave like a move assignment operator is unconventional and can lead to confusion and unexpected behavior. It's better to follow the standard conventions for copy and move semantics, which involve distinguishing between copy and move operations using appropriate language features (std::move() for move semantics) and providing separate implementations for copy and move assignment operators.
