@@ -11,6 +11,12 @@ We have a class claaed ```String```
 class String
 {
 public:
+    String()
+    {
+        m_data = nullptr;
+        m_size = 0;
+    };
+
     String(const char *data)
     {
         printf("Created!\n");
@@ -21,14 +27,18 @@ public:
     ~String()
     {
         printf("String deleted!\n");
-        delete m_data;
+        if (!m_data)
+            delete m_data;
     }
     void Print()
     {
-        for (int i = 0; i < m_size; i++)
-            printf("%c", m_data[i]);
+        if (!m_data)
+        {
+            for (int i = 0; i < m_size; i++)
+                printf("%c", m_data[i]);
 
-        printf("%c", '\n');
+            printf("%c", '\n');
+        }
     }
 private:
     uint32_t m_size;
@@ -259,3 +269,64 @@ String deleted!
 ```
 
 while technically possible, implementing the copy assignment operator to behave like a move assignment operator is unconventional and can lead to confusion and unexpected behavior. It's better to follow the standard conventions for copy and move semantics, which involve distinguishing between copy and move operations using appropriate language features (std::move() for move semantics) and providing separate implementations for copy and move assignment operators.
+
+If we make something like this, we will make something very bad as you can imagine .
+
+```cpp
+ahmed = std::move(ahmed);
+```
+
+To avoid this bad use we can rewite the move assignment operator overloading to be like this
+
+```cpp
+String &operator=(String &&other)
+{
+    if (this != &other)
+    {
+        /* If the two object was not the same but the data inside them are the same, there is no need to copy */
+        if (m_data != other.m_data)
+        {
+            printf("Moved assignment! \n");
+            m_size = other.m_size;
+            m_data = other.m_data;
+            other.m_size = 0;
+            other.m_data = nullptr;
+        }
+    }
+    return *this;
+}
+```
+
+### The final example to see
+
+```cpp
+String khaled;
+String ahmed = String("Ahmed");
+
+printf("Khalid: ");
+khaled.Print();
+printf("\n");
+printf("ahmed: ");
+ahmed.Print();
+
+khaled = std::move(ahmed);
+printf("MOVED\n");
+
+printf("Khalid: ");
+khaled.Print();
+printf("ahmed: ");
+printf("\n");
+ahmed.Print();
+```
+
+```
+Created!
+Khalid: 
+ahmed: Ahmed
+Moved assignment! 
+MOVED
+Khalid: Ahmed
+ahmed: 
+String deleted!
+String deleted!
+```

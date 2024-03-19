@@ -5,6 +5,12 @@
 class String
 {
 public:
+    String()
+    {
+        m_data = nullptr;
+        m_size = 0;
+    };
+
     String(const char *data)
     {
         printf("Created!\n");
@@ -16,7 +22,8 @@ public:
     ~String()
     {
         printf("String deleted!\n");
-        delete m_data;
+        if (!m_data)
+            delete m_data;
     }
 
     String(const String &other)
@@ -39,13 +46,18 @@ public:
 
     String &operator=(String &&other)
     {
-        printf("Moved assignment! \n");
-        m_size = other.m_size;
-        m_data = other.m_data;
+        if (this != &other)
+        {
+            if (m_data != other.m_data)
+            {
+                printf("Moved assignment! \n");
+                m_size = other.m_size;
+                m_data = other.m_data;
 
-        other.m_size = 0;
-        other.m_data = nullptr;
-
+                other.m_size = 0;
+                other.m_data = nullptr;
+            }
+        }
         return *this;
     }
 
@@ -64,10 +76,13 @@ public:
 
     void Print()
     {
-        for (int i = 0; i < m_size; i++)
-            printf("%c", m_data[i]);
+        if (m_data)
+        {
+            for (int i = 0; i < m_size; i++)
+                printf("%c", m_data[i]);
 
-        printf("%c", '\n');
+            printf("%c", '\n');
+        }
     }
 
 private:
@@ -96,14 +111,28 @@ private:
 };
 int main()
 {
-    String khaled = String("Khaled");
+    String khaled;
     String ahmed = String("Ahmed");
+    
+    printf("Khalid: ");
+    khaled.Print();
+    printf("\n");
+    printf("ahmed: ");
+    ahmed.Print();
+
     khaled = std::move(ahmed);
+    printf("MOVED\n");
+
+    printf("Khalid: ");
+    khaled.Print();
+    printf("ahmed: ");
+    printf("\n");
+    ahmed.Print();
 
     // For fun
     // String mostafa = String("Mostafa");
     // String shady = String("Shady");
     // mostafa = shady;
-    //std::cin.get();
+    // std::cin.get();
     return 0;
 }
