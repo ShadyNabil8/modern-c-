@@ -51,6 +51,7 @@ public:
             if (m_data != other.m_data)
             {
                 printf("Moved assignment! \n");
+                delete[] m_data;
                 m_size = other.m_size;
                 m_data = other.m_data;
 
@@ -65,6 +66,7 @@ public:
     // String &operator=(String &other)
     // {
     //     printf("Copy assignment\n");
+    //     delete[] m_data;
     //     m_size = other.m_size;
     //     m_data = other.m_data;
 

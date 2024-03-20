@@ -223,6 +223,7 @@ In this case we try to ```move``` an ```existing``` object to anther ```existing
 String &operator=(String &&other)
 {
     printf("Moved assignment! \n");
+    delete[] m_data;
     m_size = other.m_size;
     m_data = other.m_data;
     other.m_size = 0;
@@ -247,6 +248,7 @@ You can say "Whay I am using std::move to do this while I can implement a copy a
 String &operator=(String &other)
 {
     printf("Copy assignment\n");
+    delete[] m_data;
     m_size = other.m_size;
     m_data = other.m_data;
     other.m_size = 0;
@@ -287,6 +289,7 @@ String &operator=(String &&other)
         if (m_data != other.m_data)
         {
             printf("Moved assignment! \n");
+            delete[] m_data;
             m_size = other.m_size;
             m_data = other.m_data;
             other.m_size = 0;
