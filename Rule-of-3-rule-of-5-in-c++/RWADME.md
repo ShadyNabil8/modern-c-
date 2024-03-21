@@ -162,3 +162,21 @@ Entity &operator=(const Entity &other)
 ```
 
 Do allocat new memory, the object is already created and its memory already created.So do not use ```new``` like that.
+
+# Rule of 5
+
+The “Rule of  Five” is a guideline for efficient and bug-free programming in C++. The Rule of Five states that,
+
+If any of the below functions is defined for a class, then it is better to define all of them.
+
+It includes the following functions of a class:
+
+* Destructor
+* Copy Constructor
+* Copy Assignment Operator
+* Move Constructor
+* Move Assignment Operator
+
+The Rule of Big Five is an extension of the Rule of Three to include move semantics. The Rule of Three, consists of a destructor, copy constructor, and, copy assignment operator, use all these three functions when you are dealing with dynamically allocated resources Whereas The Rule of Five includes two more functions i.e. move constructor and move assignment operator.
+
+Now we know already the Copy Constructor and Copy Assignment Operator. See the file of the ```rvalues and lvalues``` and the file of the ```move semantics``` to know the ```Move Constructor``` and ```Move Assignment Operator```.

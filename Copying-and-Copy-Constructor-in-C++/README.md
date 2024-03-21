@@ -13,11 +13,11 @@ But when dealing with ```pointers``` we assign not the actual object but the add
 
 ```cpp
 Programmer*p3 = new Programmer();
-    p3->languages = 20;
-    LOG(p3->languages); // 20
-    Programmer*p4 = p3;
-    p4->languages=30;
-    LOG(p3->languages); // 30
+p3->languages = 20;
+LOG(p3->languages); // 20
+Programmer*p4 = p3;
+p4->languages=30;
+LOG(p3->languages); // 30
 ```
 
 # shallow copy
@@ -40,7 +40,7 @@ free(): double free detected in tcache 2
 Aborted (core dumped)
 ```
 
-And this is because when we use ```=``` it means to copy the ```m_Size``` and ```*m_Buffer``` which is an address. This means that we assign onw address to two pointers. So when the program free one pointer, the another pointer pointes to null, so ant attempt to free it, the program wiil crash. I want to say that without creating a ```copy constructor```, cpp will copy thr data (m_Size/m_Buffer) to the other class, whaich is a problem.
+And this is because when we use ```=``` it means to copy the ```m_Size``` and ```*m_Buffer``` which is an address. This means that we assign one address to two pointers. So when the program free one pointer(may be at the end of the function), the another pointer pointes to null, so ant attempt to free it, the program wiil crash. I want to say that without creating a ```copy constructor```, cpp will copy thr data (m_Size/m_Buffer) to the other class(using the default copy constructor), whaich is a problem.
 
 Another example to make it clear.
 
@@ -50,18 +50,20 @@ MyString string_cpy = string;
 string_cpy[0] = 'V';
 LOG(string);
 LOG(string_cpy);
-///////////// OUTPUT /////////////
+```
+
+```
 Vrogrammer
 Vrogrammer
 free(): double free detected in tcache 2
 Aborted (core dumped)
 ```
 
-# Deep copy
+## Deep copy (Problem of the dynamiclly allocated data)
 
-To aviod the above issue and create another object when we need to create another onw not just refer to it, use deep copy instade.
+To aviod the above issue and create another object when we need to create another one not just refer to it, use deep copy instade.
 
-1. Create a ```copy cinstructor```
+1. Create a ```copy constructor```
 
 ```cpp
 MyString::MyString(const MyString &string)
@@ -96,7 +98,7 @@ void PrintMyString(const MyString string)
 }
 ```
 
-In this function we pass the object as acual object bot as a ```refrence```, so in this function we copy the object each time we pass it to the function and then print the object then delete it!!.
+In this function we pass the object as acual object not as a ```refrence```, so in this function we copy the object each time we pass it to the function and then print the object then delete it!!.
 
 
 So, Always pass te obkects as ```refrences```.
@@ -105,7 +107,7 @@ So, Always pass te obkects as ```refrences```.
 void PrintMyString(const MyString& string)
 ```
 
-And there is another issue, if we remove the **copy constructor** and did't use refrencesm we actuallt can delete our pointers```m_buffer``` inside the function the prints.
+And there is another issue, if we remove the **copy constructor** and did't use refrences, we actually can delete our pointers```m_buffer``` inside the function that prints.
 
 ```cpp
 MyString string = "Programmer";
@@ -115,7 +117,9 @@ PrintMyString(string);
 PrintMyString(string);
 PrintMyString(string);
 PrintMyString(string_cpy);
-///////////// OUTPUT /////////////
+```
+
+```
 Vrogrammer
 �.�_
 free(): double free detected in tcache 2
