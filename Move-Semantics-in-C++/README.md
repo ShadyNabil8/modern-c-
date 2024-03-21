@@ -27,7 +27,7 @@ public:
     ~String()
     {
         printf("String deleted!\n");
-        if (!m_data)
+        if (m_data)
             delete m_data;
     }
     void Print()
@@ -209,7 +209,7 @@ String Ahmed(std::move(khaled));
 
 It's the move constructor (or move assignment operator as we will se later) that actually releases the resources of an object and transfers them to another object. When you use std::move(), you're signaling to the compiler that it should call the move constructor (or move assignment operator) if one is available
 
-If we thing like this
+If we make a thing like this
 
 ```cpp
 String khaled = String("Khaled");
@@ -236,6 +236,40 @@ String &operator=(String &&other)
 Created!
 Created!
 Moved assignment! 
+String deleted!
+String deleted!
+```
+
+There is anotherthing called copy assignment operator. By ots name it doesn't move, it is just copy. So if you want to move and you used the copy assignment operator, you make a mistake because you make a copying overhead. And it looks like that.
+
+```cpp
+String &operator=(const String &other)
+{
+    printf("Copy assignment\n");
+    m_size = other.m_size;
+    delete[] m_data;
+    m_data = new char[m_size];
+    memcpy(m_data, other.m_data, m_size);
+    return *this;
+}
+```
+
+For example:
+
+```cpp
+String khaled = String("Khaled");
+    String ahmed = String("Ahmed");
+    khaled = ahmed;
+    khaled.Print();
+    ahmed.Print();
+```
+
+```
+Created!
+Created!
+Copy assignment
+Ahmed
+Ahmed
 String deleted!
 String deleted!
 ```
@@ -300,7 +334,7 @@ String &operator=(String &&other)
 }
 ```
 
-### The final example to see
+### An example to see
 
 ```cpp
 String khaled;
@@ -333,3 +367,59 @@ ahmed:
 String deleted!
 String deleted!
 ```
+
+### Another example
+
+We need to make something like this
+
+```cpp
+String mostafa = String("Mostafa");
+String shady = String("Shady");
+String ali = String("Ali");
+ali = mostafa + shady;
+mostafa.Print();
+shady.Print();
+ali.Print();
+```
+
+To make the move operation in this line ```ali = mostafa + shady;``` we need to implement the overloading of this operator ```+```. And we can see that ```mostafa + shady``` is a temporary object that will be created and will be deleted after this line. So there is no need to make a copy of ```mostafa + shady``` temp object to the ```ali``` object. We just need to steal its resources.
+
+```cpp
+String operator+(const String &other)
+{
+    uint32_t new_size = this->m_size + other.m_size;
+    char *new_data = new char[new_size];
+    memcpy(new_data, this->m_data, this->m_size);
+    memcpy(new_data + this->m_size, other.m_data, other.m_size);
+    String new_obj(new_data);
+    delete[] new_data;
+    return new_obj;
+}
+```
+
+Output
+
+```
+Created!
+Created!
+Created!
+Created!
+Moved assignment! 
+String deleted!
+Mostafa
+Shady
+MostafaShady
+String deleted!
+String deleted!
+String deleted!
+```
+
+Onw of these 4 Created objects is ```mostafa + shady``` temp object.
+
+We do not need here to use std::move
+
+```cpp
+ali = std::move(mostafa + shady);
+```
+
+Beacuse ```mostafa + shady``` is a temp object, so the compiler will try to find the ```move assignment operator``` by default. And if the compiler coundn't fine it, it will use the ```copy assignment operator```.

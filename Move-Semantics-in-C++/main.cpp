@@ -21,8 +21,9 @@ public:
 
     ~String()
     {
+        // this->Print();
         printf("String deleted!\n");
-        if (!m_data)
+        if (m_data)
             delete m_data;
     }
 
@@ -62,19 +63,31 @@ public:
         return *this;
     }
 
-    // For fun
-    // String &operator=(String &other)
-    // {
-    //     printf("Copy assignment\n");
-    //     delete[] m_data;
-    //     m_size = other.m_size;
-    //     m_data = other.m_data;
+    String operator+(const String &other)
+    {
 
-    //     other.m_size = 0;
-    //     other.m_data = nullptr;
+        uint32_t new_size = this->m_size + other.m_size;
+        char *new_data = new char[new_size];
 
-    //     return *this;
-    // }
+        memcpy(new_data, this->m_data, this->m_size);
+        memcpy(new_data + this->m_size, other.m_data, other.m_size);
+
+        String new_obj(new_data);
+
+        delete[] new_data;
+
+        return new_obj;
+    }
+
+    String &operator=(const String &other)
+    {
+        printf("Copy assignment\n");
+        m_size = other.m_size;
+        delete[] m_data;
+        m_data = new char[m_size];
+        memcpy(m_data, other.m_data, m_size);
+        return *this;
+    }
 
     void Print()
     {
@@ -85,6 +98,8 @@ public:
 
             printf("%c", '\n');
         }
+        else
+            printf("Null Data\n");
     }
 
 private:
@@ -105,7 +120,8 @@ public:
     }
     ~Entity()
     {
-        printf("Entity deleted!\n");
+        m_string.Print();
+        printf(" Entity deleted!\n");
     }
 
 private:
@@ -113,28 +129,31 @@ private:
 };
 int main()
 {
-    String khaled;
-    String ahmed = String("Ahmed");
-    
-    printf("Khalid: ");
-    khaled.Print();
-    printf("\n");
-    printf("ahmed: ");
-    ahmed.Print();
+    // String khaled;
+    // String ahmed = String("Ahmed");
 
-    khaled = std::move(ahmed);
-    printf("MOVED\n");
+    // printf("Khalid: ");
+    // khaled.Print();
+    // printf("\n");
+    // printf("ahmed: ");
+    // ahmed.Print();
 
-    printf("Khalid: ");
-    khaled.Print();
-    printf("ahmed: ");
-    printf("\n");
-    ahmed.Print();
+    // khaled = std::move(ahmed);
+    // printf("MOVED\n");
 
-    // For fun
+    // printf("Khalid: ");
+    // khaled.Print();
+    // printf("ahmed: ");
+    // printf("\n");
+    // ahmed.Print();
+
     // String mostafa = String("Mostafa");
     // String shady = String("Shady");
-    // mostafa = shady;
+    // String ali = String("Ali");
+    // ali = std::move(mostafa + shady);
+    // mostafa.Print();
+    // shady.Print();
+    // ali.Print();
     // std::cin.get();
     return 0;
 }
